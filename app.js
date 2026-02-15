@@ -1,115 +1,118 @@
-// =====================
-// TAP TABLES
-// =====================
+// ==============================
+// MATERIAL TARGET ENGAGEMENTS
+// ==============================
+const targets = {
+  Aluminum: [65, 75],
+  "Mild Steel": [65, 68],
+  Stainless: [60, 65]
+};
+
+// ==============================
+// TAP DATA
+// ==============================
 const taps = {
-  "Metric": {
-    "M3 x 0.5":  { major: 3.0, pitch: 0.5 },
-    "M4 x 0.7":  { major: 4.0, pitch: 0.7 },
-    "M5 x 0.8":  { major: 5.0, pitch: 0.8 },
-    "M6 x 1.0":  { major: 6.0, pitch: 1.0 },
-    "M8 x 1.25": { major: 8.0, pitch: 1.25 },
-    "M10 x 1.5": { major: 10.0, pitch: 1.5 },
-    "M12 x 1.75":{ major: 12.0, pitch: 1.75 }
+  Metric: {
+    "M3 × 0.5": { major: 3.0, pitch: 0.5 },
+    "M4 × 0.7": { major: 4.0, pitch: 0.7 },
+    "M5 × 0.8": { major: 5.0, pitch: 0.8 },
+    "M6 × 1.0": { major: 6.0, pitch: 1.0 },
+    "M8 × 1.25": { major: 8.0, pitch: 1.25 },
+    "M10 × 1.5": { major: 10.0, pitch: 1.5 }
   },
-  "UNC": {
-    "#6-32":   { major: 3.51, pitch: 0.7938 },
-    "#8-32":   { major: 4.17, pitch: 0.7938 },
-    "#10-24":  { major: 4.83, pitch: 1.058 },
-    "1/4-20":  { major: 6.35, pitch: 1.27 },
-    "5/16-18": { major: 7.94, pitch: 1.411 },
-    "3/8-16":  { major: 9.53, pitch: 1.587 }
-  },
-  "UNF": {
-    "#10-32":  { major: 4.83, pitch: 0.7938 },
-    "1/4-28":  { major: 6.35, pitch: 0.907 },
-    "5/16-24": { major: 7.94, pitch: 1.058 },
-    "3/8-24":  { major: 9.53, pitch: 1.058 }
+  Inch: {
+    "#6-32 UNC": { major: 3.505, pitch: 25.4 / 32 },
+    "#8-32 UNC": { major: 4.166, pitch: 25.4 / 32 },
+    "#10-24 UNC": { major: 4.826, pitch: 25.4 / 24 },
+    "#10-32 UNF": { major: 4.826, pitch: 25.4 / 32 },
+    "1/4-20 UNC": { major: 6.35, pitch: 25.4 / 20 },
+    "1/4-28 UNF": { major: 6.35, pitch: 25.4 / 28 },
+    "5/16-18 UNC": { major: 7.94, pitch: 25.4 / 18 },
+    "5/16-24 UNF": { major: 7.94, pitch: 25.4 / 24 }
   }
 };
 
-// =====================
-// DRILL STANDARDS (REAL)
-// =====================
+// ==============================
+// DRILL TABLES (REAL SIZES)
+// ==============================
 const drills = [
   // Metric
-  { label: "2.5 mm", mm: 2.5 }, { label: "3.3 mm", mm: 3.3 },
-  { label: "4.2 mm", mm: 4.2 }, { label: "4.3 mm", mm: 4.3 },
-  { label: "5.0 mm", mm: 5.0 }, { label: "5.1 mm", mm: 5.1 },
-  { label: "6.8 mm", mm: 6.8 }, { label: "8.5 mm", mm: 8.5 },
-  { label: "10.2 mm", mm: 10.2 },
+  { label: "2.5 mm", dia: 2.5 },
+  { label: "3.3 mm", dia: 3.3 },
+  { label: "4.2 mm", dia: 4.2 },
+  { label: "5.0 mm", dia: 5.0 },
+  { label: "6.8 mm", dia: 6.8 },
+  { label: "8.5 mm", dia: 8.5 },
 
   // Number
-  { label: "#40", mm: 2.49 }, { label: "#36", mm: 2.74 },
-  { label: "#29", mm: 3.45 }, { label: "#21", mm: 3.73 },
-  { label: "#17", mm: 4.496 }, { label: "#7", mm: 5.105 },
-  { label: "#3", mm: 5.817 },
+  { label: "#36", dia: 2.743 },
+  { label: "#30", dia: 3.264 },
+  { label: "#19", dia: 4.216 },
+  { label: "#7", dia: 5.105 },
+  { label: "#3", dia: 5.791 },
+  { label: "F", dia: 6.528 },
 
   // Fractional
-  { label: "1/8\"", mm: 3.175 },
-  { label: "11/64\"", mm: 4.366 },
-  { label: "13/64\"", mm: 5.159 },
-  { label: "17/64\"", mm: 6.747 },
-  { label: "21/64\"", mm: 8.334 },
-  { label: "13/32\"", mm: 10.32 }
+  { label: "7/64\"", dia: 2.778 },
+  { label: "1/8\"", dia: 3.175 },
+  { label: "11/64\"", dia: 4.366 },
+  { label: "13/64\"", dia: 5.159 },
+  { label: "17/64\"", dia: 6.747 },
+  { label: "21/64\"", dia: 8.334 }
 ];
 
-// =====================
-// MATERIAL TARGETS
-// =====================
-const targets = {
-  "Aluminum":   [68, 72],
-  "Mild Steel": [65, 68],
-  "Stainless":  [60, 65]
-};
-
-// =====================
-// UI
-// =====================
-const tapSelect = document.getElementById("tapSelect");
-const materialSelect = document.getElementById("materialSelect");
+// ==============================
+// UI ELEMENTS
+// ==============================
+const tapSelect = document.getElementById("tap");
+const materialSelect = document.getElementById("material");
 const output = document.getElementById("output");
 
-// =====================
-// INIT
-// =====================
+// ==============================
+// INIT DROPDOWNS
+// ==============================
 function init() {
-  tapSelect.innerHTML = "";
-
-  Object.keys(taps).forEach(group => {
+  for (const group in taps) {
     const optGroup = document.createElement("optgroup");
     optGroup.label = group;
 
-    Object.keys(taps[group]).forEach(t => {
+    for (const tap in taps[group]) {
       const opt = document.createElement("option");
-      opt.value = `${group}|${t}`;
-      opt.textContent = t;
+      opt.value = `${group}|${tap}`;
+      opt.textContent = tap;
       optGroup.appendChild(opt);
-    });
-
+    }
     tapSelect.appendChild(optGroup);
-  });
+  }
 
   render();
 }
 
-// =====================
-// CALC
-// =====================
+tapSelect.addEventListener("change", render);
+materialSelect.addEventListener("change", render);
+
+// ==============================
+// CALCULATIONS
+// ==============================
 function engagement(tap, drill) {
-  return ((tap.major - drill.mm) / tap.pitch) * 100;
+  return ((tap.major - drill.dia) / tap.pitch) * 100;
 }
 
-// =====================
-// RENDER
-// =====================
+function drillType(label) {
+  if (label.includes("mm")) return "Metric";
+  if (label.includes("#")) return "Number";
+  return "Fractional";
+}
+
+// ==============================
+// RENDER OUTPUT
+// ==============================
 function render() {
   const [group, tapName] = tapSelect.value.split("|");
   const tap = taps[group][tapName];
-  const mat = materialSelect.value;
-  const [low, high] = targets[mat];
+  const material = materialSelect.value;
+  const [low, high] = targets[material];
   const targetMid = (low + high) / 2;
 
-  // Calculate engagement and filter acceptable
   const acceptable = drills
     .map(d => ({
       ...d,
@@ -118,7 +121,6 @@ function render() {
     }))
     .filter(d => d.eng >= low && d.eng <= high);
 
-  // Best per drill type
   const bestByType = {};
   acceptable.forEach(d => {
     if (
@@ -130,13 +132,11 @@ function render() {
     }
   });
 
-  // Overall best
   const overallBest = Object.values(bestByType).sort(
     (a, b) => Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid)
   )[0];
 
-  // Render
-  let html = `<h3>Recommended Drill Options</h3>`;
+  let html = `<h3>Recommended Drill Sizes</h3>`;
 
   ["Metric", "Number", "Fractional"].forEach(type => {
     if (!bestByType[type]) return;
@@ -152,9 +152,11 @@ function render() {
 
   html += `
     <div class="target">
-      Target Engagement: ${low}–${high}% (${mat}, hand tapping)
+      Target Engagement: ${low}–${high}% (${material}, hand tapping)
     </div>`;
 
   output.innerHTML = html;
 }
+
+// ==============================
 init();
