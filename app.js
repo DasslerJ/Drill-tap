@@ -105,12 +105,20 @@ function drillType(label) {
 
 // ==============================
 // RENDER OUTPUT
-// ==============================
+// =============================
+
+function drillType(label) {
+  if (label.includes("mm")) return "Metric";
+  if (label.includes("#")) return "Number";
+  return "Fractional";
+}
+
 function render() {
   const [group, tapName] = tapSelect.value.split("|");
   const tap = taps[group][tapName];
-  const material = materialSelect.value;
-  const [low, high] = targets[material];
+  const mat = materialSelect.value;
+
+  const [low, high] = targets[mat];
   const targetMid = (low + high) / 2;
 
   const acceptable = drills
@@ -133,10 +141,11 @@ function render() {
   });
 
   const overallBest = Object.values(bestByType).sort(
-    (a, b) => Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid)
+    (a, b) =>
+      Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid)
   )[0];
 
-  let html = `<h3>Recommended Drill Sizes</h3>`;
+  let html = `<h3>Recommended Drill Options</h3>`;
 
   ["Metric", "Number", "Fractional"].forEach(type => {
     if (!bestByType[type]) return;
@@ -152,7 +161,7 @@ function render() {
 
   html += `
     <div class="target">
-      Target Engagement: ${low}–${high}% (${material}, hand tapping)
+      Target Engagement: ${low}–${high}% (${mat}, hand tapping)
     </div>`;
 
   output.innerHTML = html;
