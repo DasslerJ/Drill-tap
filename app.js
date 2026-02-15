@@ -101,6 +101,7 @@ function engagement(tap, drill) {
 
 // =====================
 // RENDER
+// =====================
 function render() {
   const [group, tapName] = tapSelect.value.split("|");
   const tap = taps[group][tapName];
@@ -108,51 +109,28 @@ function render() {
   const [low, high] = targets[mat];
   const targetMid = (low + high) / 2;
 
-  // Calculate engagement and filter acceptable
-  const acceptable = drills
-    .map(d => ({
-      ...d,
-      eng: engagement(tap, d),
-      type: drillType(d.label)
-    }))
-    .filter(d => d.eng >= low && d.eng <= high);
+  const valid = drills
+    .map(d => ({ ...d, eng: engagement(tap, d) }))
+    .filter(d => d.eng >= low && d.eng <= high)
+    .sort((a, b) => Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid));
 
-  // Best per drill type
-  const bestByType = {};
-  acceptable.forEach(d => {
-    if (
-      !bestByType[d.type] ||
-      Math.abs(d.eng - targetMid) <
-      Math.abs(bestByType[d.type].eng - targetMid)
-    ) {
-      bestByType[d.type] = d;
-    }
-  });
-
-  // Overall best
-  const overallBest = Object.values(bestByType).sort(
-    (a, b) => Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid)
-  )[0];
-
-  // Render
   let html = `<h3>Recommended Drill Options</h3>`;
 
-  ["Metric", "Number", "Fractional"].forEach(type => {
-    if (!bestByType[type]) return;
-
-    const d = bestByType[type];
-    const star = d === overallBest ? "★ " : "";
-
+  valid.forEach((d, i) => {
     html += `
-      <div class="${d === overallBest ? "best" : "option"}">
-        ${star}${type}: ${d.label} → ${d.eng.toFixed(1)}%
+      <div class="${i === 0 ? "best" : "option"}">
+        ${i === 0 ? "★ " : ""}${d.label} → ${d.eng.toFixed(1)}%
       </div>`;
   });
 
-  html += `
-    <div class="target">
-      Target Engagement: ${low}–${high}% (${mat}, hand tapping)
-    </div>`;
+  html += `<div class="target">
+    Target Engagement: ${low}–${high}% (Hand Tapping)
+  </div>`;
 
   output.innerHTML = html;
 }
+
+tapSelect.onchange = render;
+materialSelect.onchange = render;
+
+init();
