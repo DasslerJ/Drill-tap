@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tap Drill Selector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 16px; background: #111; color: #fff; }
+    select { width: 100%; padding: 12px; font-size: 18px; margin-bottom: 12px; }
+    .card { background: #1e1e1e; padding: 16px; border-radius: 10px; }
+    .best { color: #00ff9c; font-weight: bold; }
+    .option { margin-top: 8px; }
+    .target { margin-top: 12px; opacity: 0.8; }
+  </style>
+</head>
+<body>
+
+<h2>Tap Drill Selector</h2>
+
+<select id="tapSelect"></select>
+<select id="materialSelect">
+  <option>Aluminum</option>
+  <option>Mild Steel</option>
+  <option>Stainless</option>
+</select>
+
+<div class="card" id="output"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
