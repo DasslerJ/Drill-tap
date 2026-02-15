@@ -107,18 +107,11 @@ function drillType(label) {
 // RENDER OUTPUT
 // =============================
 
-function drillType(label) {
-  if (label.includes("mm")) return "Metric";
-  if (label.includes("#")) return "Number";
-  return "Fractional";
-}
-
 function render() {
   const [group, tapName] = tapSelect.value.split("|");
   const tap = taps[group][tapName];
-  const mat = materialSelect.value;
-
-  const [low, high] = targets[mat];
+  const material = materialSelect.value;
+  const [low, high] = targets[material];
   const targetMid = (low + high) / 2;
 
   const acceptable = drills
@@ -141,28 +134,44 @@ function render() {
   });
 
   const overallBest = Object.values(bestByType).sort(
-    (a, b) =>
-      Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid)
+    (a, b) => Math.abs(a.eng - targetMid) - Math.abs(b.eng - targetMid)
   )[0];
 
-  let html = `<h3>Recommended Drill Options</h3>`;
+  let html = `
+    <h3>Drill Selection</h3>
+    <div class="instruction">Use this drill (best overall):</div>
+  `;
 
   ["Metric", "Number", "Fractional"].forEach(type => {
-    if (!bestByType[type]) return;
-
     const d = bestByType[type];
-    const star = d === overallBest ? "★ " : "";
+    if (!d) return;
+
+    if (d === overallBest) {
+      html += `
+        <div class="best">
+          ★ ${type}: ${d.label} → ${d.eng.toFixed(1)}%
+        </div>
+        <div class="instruction">Other acceptable options:</div>
+      `;
+    }
+  });
+
+  ["Metric", "Number", "Fractional"].forEach(type => {
+    const d = bestByType[type];
+    if (!d || d === overallBest) return;
 
     html += `
-      <div class="${d === overallBest ? "best" : "option"}">
-        ${star}${type}: ${d.label} → ${d.eng.toFixed(1)}%
-      </div>`;
+      <div class="option">
+        ${type}: ${d.label} → ${d.eng.toFixed(1)}%
+      </div>
+    `;
   });
 
   html += `
     <div class="target">
-      Target Engagement: ${low}–${high}% (${mat}, hand tapping)
-    </div>`;
+      Target thread engagement: ${low}–${high}% (${material}, hand tapping)
+    </div>
+  `;
 
   output.innerHTML = html;
 }
